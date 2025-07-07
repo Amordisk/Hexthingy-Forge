@@ -1,0 +1,33 @@
+
+modLoader="kotlinforforge" # or "javafml" depending on your Kotlin setup
+loaderVersion="[1,)"
+license="LGPL-3.0"
+
+[[mods]]
+modId="hexthingy"
+version="${file.jarVersion}"
+displayName="Hexthingy (Forge)"
+description="Unofficial Forge port of hexthingy"
+authors="James Huizenga (Original by Uwutaku)"
+logoFile="assets/hexthingy/icon.png"
+
+[[dependencies.hexthingy]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.hexthingy]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.hexthingy]]
+    modId="hexcasting"
+    mandatory=true
+    versionRange="[0.11.2,)"
+    ordering="NONE"
+    side="BOTH"
