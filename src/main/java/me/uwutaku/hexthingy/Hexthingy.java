@@ -6,33 +6,40 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
-import net.fabricmc.api.ModInitializer;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
-public class Hexthingy implements ModInitializer {
 
-	public static final String MODID = "hexthingy";
+@Mod(Hexthingy.MODID)
+public class Hexthingy {
+    public static final String MODID = "hexthingy";
 
-	@Override
-	public void onInitialize() {
-		registerAction("smite", "wweeewwweeeqeeeadweeead", HexDir.EAST, new Smite());
-		registerAction("things/pasteurpurification", "aqqqqa", HexDir.NORTH_WEST, new PasteurPurification());
-		registerAction("things/cleaneffect", "qqqqwaqw", HexDir.SOUTH_WEST, new CleanEffect());
-		registerAction("allaycreation", "qqqqqweeweeaeeqeeeeeweeweeaeeaeeweedqqqqdadedaddwwqqq", HexDir.SOUTH_EAST, new AllayCreation());
+    public Hexthingy() {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        
+        modEventBus.addListener(this::commonSetup);
+    }
 
-	}
-	private void registerAction(String actionId, String pattern, HexDir direction, Action action) {
-		Registry.register(
-				HexActions.REGISTRY,
-				new Identifier(MODID, actionId),
-				new ActionRegistryEntry(
-						HexPattern.fromAngles(pattern, direction),
-						new ActionPredicateWrapper(action, (CastingEnvironment env) -> Optional.empty())
-				)
-		);
-	}
+    private void commonSetup(final net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent event) {
+        registerAction("smite", "wweeewwweeeqeeeadweeead", HexDir.EAST, new Smite());
+        registerAction("things/pasteurpurification", "aqqqqa", HexDir.NORTH_WEST, new PasteurPurification());
+        registerAction("things/cleaneffect", "qqqqwaqw", HexDir.SOUTH_WEST, new CleanEffect());
+        registerAction("allaycreation", "qqqqqweeweeaeeqeeeeeweeweeaeeaeeweedqqqqdadedaddwwqqq", HexDir.SOUTH_EAST, new AllayCreation());
+    }
 
+    private void registerAction(String actionId, String pattern, HexDir direction, Action action) {
+        Registry.register(
+            HexActions.REGISTRY,
+            new ResourceLocation(MODID, actionId),
+            new ActionRegistryEntry(
+                HexPattern.fromAngles(pattern, direction),
+                new ActionPredicateWrapper(action, (CastingEnvironment env) -> Optional.empty())
+            )
+        );
+    }
 }

@@ -3,6 +3,7 @@ plugins {
 	id 'org.spongepowered.mixin' version '0.7.+'
 	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "1.9.10"
+	
 }
 
 version = project.modVersion
@@ -71,7 +72,9 @@ dependencies {
 
 	 // Mixin dependencies
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation 'org.spongepowered:mixin:0.8.5'
+	testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+	implementation 'org.spongepowered:mixin:0.8.5'
 
     // Kotlin
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'

@@ -5,8 +5,9 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
-import net.minecraft.entity.LivingEntity
-import net.minecraft.server.world.ServerWorld
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.damagesource.DamageSources
 
 class Smite : SpellAction {
     override val argc = 2
@@ -23,18 +24,15 @@ class Smite : SpellAction {
         return SpellAction.Result(
             Spell(target, dmg),
             cost.toLong(),
-            listOf(ParticleSpray.cloud(target.pos.add(0.0, target.eyeY / 2.0, 0.0), 1.0))
+            listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
         )
     }
 
-    private class Spell(val target: LivingEntity, val dmg: Double) :
-        RenderedSpell {
+    private class Spell(val target: LivingEntity, val dmg: Double) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-
-            if (target.world is ServerWorld) {
-                val serverWorld = target.world as ServerWorld
-                val magicDamage = serverWorld.damageSources.magic()
-                target.damage(magicDamage, dmg.toFloat())
+            if (target.level() is ServerLevel) {
+                val damageSources = target.level().damageSources()
+                target.hurt(damageSources.magic(), dmg.toFloat())
             }
         }
     }
